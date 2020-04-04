@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class TelaSecundaria extends StatefulWidget {
+
+  String valor;
+
+  TelaSecundaria(this.valor);
+
   @override
   _TelaSecundariaState createState() => _TelaSecundariaState();
 }
