@@ -32,9 +32,10 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TelaSecundaria("Johnathan")
+                    builder: (context) => TelaSecundaria(valor: "Johnathan")
                   )
                 );
+                print("Clicou e passou o parâmetro");
               }
             )
           ],
