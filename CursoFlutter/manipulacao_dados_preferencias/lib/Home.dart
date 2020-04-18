@@ -13,6 +13,7 @@ class _HomeState extends State<Home> {
 
   _salvar() async {
 
+    //Pega o valor do campo digitado
     String valorDigitado = _controllerCampo.text;
 
     final prefs = await SharedPreferences.getInstance();
@@ -26,7 +27,7 @@ class _HomeState extends State<Home> {
 
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _textoSalvo = prefs.getString("nome") ?? "Sem valor";
+      _textoSalvo = prefs.getString("nome") ?? "Sem valor!";
     });
 
     print("Operação (Recuperar): $_textoSalvo");

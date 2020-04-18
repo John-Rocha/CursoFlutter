@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:projeto_pessoal/models/item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MaterialApp(
   debugShowCheckedModeBanner: false,
@@ -20,9 +22,9 @@ class Home extends StatefulWidget {
 
   Home() {
     itens = [];
-    itens.add(Item(title: "Banana", done: false));
-    itens.add(Item(title: "Abacate", done: true));
-    itens.add(Item(title: "Laranja", done: false));
+    // itens.add(Item(title: "Banana", done: false));
+    // itens.add(Item(title: "Abacate", done: true));
+    // itens.add(Item(title: "Laranja", done: false));
   }
   @override
   _HomeState createState() => _HomeState();
@@ -38,12 +40,38 @@ class _HomeState extends State<Home> {
     }
     setState(() {
       widget.itens.add(Item(title: text.text, done: false));
-      text.clear();
+      text.text = "";
+      save();
     });
   }
 
-  void _remove(int index) {
+  void remove(int index) {
     widget.itens.removeAt(index);
+    save();
+  }
+
+  Future load() async {
+    var pref = await SharedPreferences.getInstance();
+    var data = pref.getString('data');
+
+    if (data != null) {
+      Iterable decoded = jsonDecode(data);
+      List<Item> result = decoded.map((x){
+        Item.fromJson(x);
+      }).toList();
+      setState(() {
+        widget.itens = result;
+      });
+    }
+  }
+
+  save() async {
+    var pref = await SharedPreferences.getInstance();
+    await pref.setString('data', jsonEncode(widget.itens));
+  }
+
+  _HomeState() {
+    load();
   }
 
   @override
@@ -80,7 +108,7 @@ class _HomeState extends State<Home> {
             onChanged: (valor) {
               setState(() {
                 item.done = valor;
-                print(valor);
+                save();
               });
             },
           ),

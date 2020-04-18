@@ -74,10 +74,12 @@ class _HomeState extends State<Home> {
         title: Text("Lista de tarefas"),
         backgroundColor: Colors.purple,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: Colors.purple,
+        foregroundColor: Colors.white,
+        elevation: 20,
         onPressed: () {
           showDialog(
             context: context,
