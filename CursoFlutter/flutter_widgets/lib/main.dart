@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lista_tarefas/Teste.dart';
+import 'package:flutter_widgets/Home.dart';
 
 void main() => runApp(MaterialApp(
   debugShowCheckedModeBanner: false,
-  home: Teste(),
+  home: Home(),
 ));
