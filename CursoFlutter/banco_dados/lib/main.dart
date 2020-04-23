@@ -49,8 +49,14 @@ class _HomeState extends State<Home> {
     Database bd = await _recuperarBancoDados();
     
     Map<String, dynamic> dadosUsuario = {
-      "nome" : "Anne Thais",
-      "idade" : 25
+      // "nome" : "John Rocha",
+      // "idade" : 33,
+      // "nome" : "Anne Guimarães",
+      // "idade" : 25,
+      // "nome" : "Maria Rocha",
+      // "idade" : 53,
+      // "nome" : "João Almeida",
+      // "idade" : 59,
     };
     int id = await bd.insert("usuarios", dadosUsuario);
 
@@ -77,11 +83,69 @@ class _HomeState extends State<Home> {
 
   }
 
+  _listarUsuarioPeloId(int id) async {
+
+    //recupera o banco
+    Database bd = await _recuperarBancoDados();
+
+    List usuarios = await bd.query(
+      "usuarios",
+      columns: ["id", "nome", "idade"],
+      where: "id = ?",
+      whereArgs: [id]
+    );
+
+      for (var usuario in usuarios) {
+        print(usuario);
+      }
+  }
+
+  _excluirUsuario(int id) async {
+
+    Database bd = await _recuperarBancoDados();
+
+    int  retorno = await bd.delete(
+      "usuarios",
+      where: "id = ?",
+      whereArgs: [id]
+    );
+
+    print("Item quantidade removida: $retorno");
+  }
+
+  _atualizarUsuario(int id) async {
+
+    Database bd = await _recuperarBancoDados();
+
+    Map<String, dynamic> dadosUsuario = {
+      "nome" : "John Rocha",
+      "idade" : 32
+    };
+
+    int retorno = await bd.update(
+      "usuarios",
+      dadosUsuario,
+      where: "id=?",
+      whereArgs: [id]
+    );
+
+    //print("Item quantidade removida: $retorno");
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    //_salvar();
+    //_excluirUsuario(5);
+    _listarUsuarios();
+    //_recuperarBancoDados();
+    //_atualizarUsuario(8);
+    //_listarUsuarioPeloId(8);
+  }
+
   @override
   Widget build(BuildContext context) {
-    _listarUsuarios();
-    _salvar();
-    _recuperarBancoDados();
     return Container(
       
     );
