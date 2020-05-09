@@ -1,93 +1,120 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:async';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-  WidgetsFlutterBinding.ensureInitialized ();
-
-  Firestore db = Firestore.instance;
-
-  /* 
-  db.collection("usuarios")
-    .document("003")
-    .setData(
-      {
-        "nome": "Maria",
-        "idade": "53"
-      }
-    );   
-    */
-
-  /* 
-  Firestore db = Firestore.instance;
-
-  DocumentSnapshot snapshot = await db.collection("usuarios").document("002").get();
-
-  print("Dados: " + snapshot.data.toString());
-  */  
-
-  QuerySnapshot querySnapshot = await db
-    .collection("usuarios")
-    .getDocuments();
-
-  //print("dados usuarios: " + querySnapshot.documents.toString());
-
-  for (DocumentSnapshot item in querySnapshot.documents) {
-    print("dados usuarios: " + item.);
-  }
-
-runApp(Home());
-} 
-
-class Home extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      
-    );
-  }
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: Home(),
+  ));
 }
 
-/* class Home extends StatefulWidget {
+class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
 
+  File _imagem;
+  String _statusUpload = "Upload não iniciado";
+  String _urlImagemRecuperada = null;
 
-  _recuperandoDados() async {
+  Future _recuperarImagem(bool daCamera) async {
+    
+    File imagemSelecionada;
 
-    Firestore db = Firestore.instance;
-    DocumentSnapshot snapshot = await db.collection("usuarios").document("001").get();
+    if(daCamera) {//da camera
+      imagemSelecionada = await ImagePicker.pickImage(source: ImageSource.camera);
+    }else{// da galeria
+      imagemSelecionada = await ImagePicker.pickImage(source: ImageSource.gallery);
+    }
 
-    print("Dados: " + snapshot.data.toString());
+    setState(() {
+      _imagem = imagemSelecionada;
+    });
 
   }
 
-  _deletandoDados() {
-    Firestore db = Firestore.instance;
-    db.collection("usuarios").document("001").delete();
+  Future _uploadImagem() async {
+
+    FirebaseStorage storage = FirebaseStorage.instance;
+    StorageReference pastaRaiz = storage.ref();
+    StorageReference arquivo = pastaRaiz.child("fotos").child("foto1.jpg");
+
+    StorageUploadTask task = arquivo.putFile(_imagem);
+
+    task.events.listen((StorageTaskEvent storageEvent){
+      
+      if(storageEvent.type == StorageTaskEventType.progress){
+        setState(() {
+          _statusUpload = "Em progresso";
+        });
+      }else if (storageEvent.type == StorageTaskEventType.success){
+        setState(() {
+          _statusUpload = "Upload realizado com sucesso!";
+        });
+      }
+    });
+
+    task.onComplete.then((StorageTaskSnapshot snapshot){
+
+      _recuperarUrlImagem(snapshot);
+
+    });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _recuperandoDados();
+  Future _recuperarUrlImagem(StorageTaskSnapshot snapshot) async {
+    String url = await snapshot.ref.getDownloadURL();
+    print("Resultado URL: " + url);
+
+    setState(() {
+      _urlImagemRecuperada = url;
+    });
   }
-  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Testando Firebase"),
+        title: Text("Selecionar imagem"),
       ),
-      body: ListView.builder(
-        
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Text(_statusUpload),
+            RaisedButton(
+              child: Text("Camera"),
+              onPressed: (){
+                _recuperarImagem(true);
+              },
+            ),
+            RaisedButton(
+              child: Text("Galeria"),
+              onPressed: (){
+                _recuperarImagem(false);
+              },
+            ),
+            _imagem == null
+              ? Container()
+              : Image.file(_imagem),
+            _imagem == null
+              ? Container()
+              : RaisedButton(
+              child: Text("Upload Storage"),
+              onPressed: (){
+                _uploadImagem();
+              },
+            ),
+            _urlImagemRecuperada == null
+              ? Container()
+              : Image.network(_urlImagemRecuperada)
+          ],
+        ),
       ),
     );
   }
 }
-*/

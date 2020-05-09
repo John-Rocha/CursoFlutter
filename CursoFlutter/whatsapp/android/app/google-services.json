@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "687077470434",
+    "firebase_url": "https://whatsapp-da40b.firebaseio.com",
+    "project_id": "whatsapp-da40b",
+    "storage_bucket": "whatsapp-da40b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:687077470434:android:b98cb2f5ec364788f9eebb",
+        "android_client_info": {
+          "package_name": "com.example.whatsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "687077470434-oiqlu1amkc81d25f5u8b1n6i5q58pvvc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVFOH6zbocJey51cO3KGKOWU_tYn_2DDI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "687077470434-oiqlu1amkc81d25f5u8b1n6i5q58pvvc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

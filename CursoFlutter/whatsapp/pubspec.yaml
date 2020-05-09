@@ -1,4 +1,4 @@
-name: firebase
+name: whatsapp
 description: A new Flutter project.
 
 # The following defines the version and build number for your application.
@@ -23,18 +23,10 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  firebase_core: ^0.4.0+5
-  cloud_firestore: ^0.12.5
-  firebase_storage: ^3.0.1
-  firebase_auth: ^0.11.1+6
-  image_picker: ^0.6.6+1
-
-  #firebase_core: ^0.4.4+3
-  #firebase_core_web: ^0.1.1+2
-  #cloud_firestore: ^0.13.5
-  #firebase_storage: ^3.1.5
-  #firebase_auth: ^0.16.0
-
+  firebase_core: ^0.4.4+3
+  firebase_auth: ^0.16.0
+  firebase_storage: ^3.1.5
+  cloud_firestore: ^0.13.5
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +48,9 @@ flutter:
   # assets:
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
+  assets:
+    - imagens/logo.png
+    - imagens/usuario.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
