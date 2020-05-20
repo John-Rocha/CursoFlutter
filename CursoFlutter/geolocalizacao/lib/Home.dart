@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocalizacao/Home.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -12,6 +14,10 @@ class _HomeState extends State<Home> {
   /* Utilizado para definir que uma tarefa foi completada e utilizando 
   esse controller nós conseguiremos capturar o resultado do que foi executado */
   Completer<GoogleMapController> _controller = Completer();
+  CameraPosition _posicaoCamera = CameraPosition(
+    target: LatLng(0.002449, -51.065553),
+    zoom: 19,
+  );
   Set<Marker> _marcadores = {};
   Set<Polygon> _polygons = {};
   Set<Polyline> _polylines = {};
@@ -26,12 +32,7 @@ class _HomeState extends State<Home> {
 
     googleMapController.animateCamera(
       CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: LatLng(0.001827, -51.066055),
-          zoom: 16,
-          tilt: 0,
-          bearing: 0,
-        )
+        _posicaoCamera
       ));
   }
 
@@ -141,10 +142,133 @@ class _HomeState extends State<Home> {
     });
   }
 
+  _recuperarLocalizacaoAtual() async {
+
+    Position position = await Geolocator().getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high
+    );
+
+    setState(() {
+      _posicaoCamera = CameraPosition(
+        target: LatLng(position.latitude, position.longitude),
+        zoom: 17
+      );
+      _movimentarCamera();
+    });
+    //0.031822, -51.067440
+
+    //print("Localização atual: " + position.toString());
+
+  }
+
+  _adicionarListenerLocalizacao(){
+
+    var geolocator = Geolocator();
+    var locationOptions = LocationOptions(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 10,
+    );
+
+    geolocator.getPositionStream(locationOptions)
+      .listen((Position position) {
+        print("Localização atual: " + position.toString());
+
+        Marker marcadorFortaleza = Marker(
+          markerId: MarkerId("marcador-fortaleza"),
+          position: LatLng(position.latitude, position.longitude),
+          infoWindow: InfoWindow(
+            title: "Meu local"
+          ),
+          icon: BitmapDescriptor.defaultMarkerWithHue(
+            BitmapDescriptor.hueMagenta
+          ),
+          onTap: () {
+            print("Meu local clicado");
+          },
+        );
+
+        setState(() {
+          //_marcadores.add(marcadorFortaleza);
+          _posicaoCamera = CameraPosition(
+            target: LatLng(position.latitude, position.longitude),
+            zoom: 17
+          );
+          _movimentarCamera();
+        });
+      });
+
+  }
+
+  _recuperarLocalParaEndereco() async {
+
+    List<Placemark> listaEnderecos = await Geolocator()
+      .placemarkFromAddress("R. Jovino Dinoá, 3369");
+
+      print("Total: " + listaEnderecos.toString());
+
+      if (listaEnderecos != null && listaEnderecos.length > 0) {
+        
+        Placemark endereco = listaEnderecos[0];
+
+        String resultado;
+
+        resultado = "\n administrativeArea " + endereco.administrativeArea;
+        resultado += "\n subAdministrativeArea " + endereco.subAdministrativeArea;
+        resultado += "\n locality " + endereco.locality;
+        resultado += "\n subLocality " + endereco.subLocality;
+        resultado += "\n thoroughfare " + endereco.thoroughfare;        
+        resultado += "\n subThoroughfare " + endereco.subThoroughfare;      
+        resultado += "\n postalCode " + endereco.postalCode;     
+        resultado += "\n country " + endereco.country;     
+        resultado += "\n isoCountryCode " + endereco.isoCountryCode;     
+        resultado += "\n position " + endereco.position.toString();     
+
+        print("resultado: " + resultado);
+        //Lat: 0.0218677, Long: -51.0609386
+
+      }
+
+  }
+
+  _recuperarEnderecoParaLatLong() async {
+
+    List<Placemark> listaEnderecos = await Geolocator()
+      .placemarkFromCoordinates(0.0218677, -51.0609386);
+
+      print("Total: " + listaEnderecos.toString());
+
+      if (listaEnderecos != null && listaEnderecos.length > 0) {
+        
+        Placemark endereco = listaEnderecos[0];
+
+        String resultado;
+
+        resultado = "\n administrativeArea " + endereco.administrativeArea;
+        resultado += "\n subAdministrativeArea " + endereco.subAdministrativeArea;
+        resultado += "\n locality " + endereco.locality;
+        resultado += "\n subLocality " + endereco.subLocality;
+        resultado += "\n thoroughfare " + endereco.thoroughfare;        
+        resultado += "\n subThoroughfare " + endereco.subThoroughfare;      
+        resultado += "\n postalCode " + endereco.postalCode;     
+        resultado += "\n country " + endereco.country;     
+        resultado += "\n isoCountryCode " + endereco.isoCountryCode;     
+        resultado += "\n position " + endereco.position.toString();     
+
+        print("resultado: " + resultado);
+        //Lat: 0.0218677, Long: -51.0609386
+
+      }
+
+  }
+
   @override
   void initState() {
     super.initState();
-    _carregarMarcadores();
+    //_carregarMarcadores();
+    //_recuperarLocalizacaoAtual();
+    //_adicionarListenerLocalizacao();
+    //_recuperarLocalParaEndereco();
+    _recuperarEnderecoParaLatLong();
   }
 
   @override
@@ -162,14 +286,12 @@ class _HomeState extends State<Home> {
         child: GoogleMap(
           mapType: MapType.normal,
           //Latitude e Longitude
-          initialCameraPosition: CameraPosition(
-            target: LatLng(0.002313, -51.066194),
-            zoom: 19,
-          ),
+          initialCameraPosition: _posicaoCamera,
           onMapCreated: _onMapCreated,
+          myLocationEnabled: true,
           markers: _marcadores,
-          polygons: _polygons,
-          polylines: _polylines,
+          // polygons: _polygons,
+          // polylines: _polylines,
         ),
       ),
     );
