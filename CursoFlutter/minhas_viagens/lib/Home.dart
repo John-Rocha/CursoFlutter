@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:minhas_viagens/Mapa.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -8,7 +9,12 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   _adicionarLocal(){
-    
+
+    Navigator.push(
+      context, 
+      MaterialPageRoute(builder: (context) => Mapa(),)
+    );
+
   }
 
   _abrirMapa() {
@@ -19,7 +25,7 @@ class _HomeState extends State<Home> {
 
   }
 
-  List _listaViagens = ['Dormir', 'Comer', 'Transar'];
+  List _listaViagens = ['Dormir', 'Comer', 'Passear'];
 
   @override
   Widget build(BuildContext context) {
