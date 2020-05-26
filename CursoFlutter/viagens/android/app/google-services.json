@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "755429560564",
+    "firebase_url": "https://viagens-8524c.firebaseio.com",
+    "project_id": "viagens-8524c",
+    "storage_bucket": "viagens-8524c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:755429560564:android:3917eed1ee8e74011f0ea1",
+        "android_client_info": {
+          "package_name": "com.example.viagens"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "755429560564-9ek5ai2a58glptv203apc1lddvvdfo2r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJTwOSVwT7EbM8K_1yOEXexDcEeOcGf_8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "755429560564-9ek5ai2a58glptv203apc1lddvvdfo2r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
