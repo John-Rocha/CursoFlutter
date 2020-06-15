@@ -58,6 +58,7 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: Color(0xff0066cc),
+        tooltip: "Clique para adicionar um local",
         onPressed: () {
           _adicionarLocal();
         },
@@ -81,6 +82,7 @@ class _HomeState extends State<Home> {
                         itemBuilder: (context, index) {
                           DocumentSnapshot item = viagens[index];
                           String titulo = item['titulo'];
+                          String cidade = item['cidade'];
                           String idViagem = item.documentID;
 
                           return GestureDetector(
@@ -89,7 +91,7 @@ class _HomeState extends State<Home> {
                             },
                             child: Card(
                               child: ListTile(
-                                title: Text(titulo),
+                                title: Text("${titulo} - ${cidade}"),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[

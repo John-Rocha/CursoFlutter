@@ -35,6 +35,7 @@ class _MapaState extends State<Mapa> {
     if (listaEnderecos != null && listaEnderecos.length > 0) {
       Placemark endereco = listaEnderecos[0];
       String rua = endereco.thoroughfare;
+      String cidade = endereco.subAdministrativeArea;
 
       Marker marcador = Marker(
           markerId:
@@ -49,6 +50,7 @@ class _MapaState extends State<Mapa> {
         //Salva no Firebase
         Map<String, dynamic> viagem = Map();
         viagem['titulo'] = rua;
+        viagem['cidade'] = cidade;
         viagem['latitude'] = latLng.latitude;
         viagem['longitude'] = latLng.longitude;
 
@@ -89,6 +91,7 @@ class _MapaState extends State<Mapa> {
 
       var dados = documentSnapshot.data;
       String titulo = dados['titulo'];
+      String cidade = dados['cidade'];
       LatLng latLng = LatLng(
         dados['latitude'],
         dados['longitude'],
@@ -99,7 +102,7 @@ class _MapaState extends State<Mapa> {
           markerId:
               MarkerId("Marcador - ${latLng.latitude} - ${latLng.longitude}"),
           position: latLng,
-          infoWindow: InfoWindow(title: titulo));
+          infoWindow: InfoWindow(title: titulo + " - " + cidade));
         _marcadores.add(marcador);
         _posicaoCamera = CameraPosition(
           target: latLng,
