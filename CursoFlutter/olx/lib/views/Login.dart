@@ -1,35 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:olx/models/Usuario.dart';
-import 'package:olx/view/InputCustomizado.dart';
+import 'package:olx/views/widgets/BotaoCustomizado.dart';
+import 'package:olx/views/widgets/InputCustomizado.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class Home extends StatefulWidget {
+class Login extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  _LoginState createState() => _LoginState();
 }
 
-class _HomeState extends State<Home> {
+class _LoginState extends State<Login> {
 
-  TextEditingController _controllerEmail = TextEditingController(text: "john@gmail.com");
-  TextEditingController _controllerSenha = TextEditingController(text: "12345678");
+  TextEditingController _controllerEmail = TextEditingController(text: "jamilton@gmail.com");
+  TextEditingController _controllerSenha = TextEditingController(text: "1234567");
 
-  String _mensagemErro = "";
   bool _cadastrar = false;
-  String _textoBotao = "";
+  String _mensagemErro = "";
+  String _textoBotao = "Entrar";
 
   _cadastrarUsuario(Usuario usuario){
 
     FirebaseAuth auth = FirebaseAuth.instance;
 
     auth.createUserWithEmailAndPassword(
-      email: usuario.email,
-      password: usuario.senha
-      ).then((firebaseUser) {
+        email: usuario.email,
+        password: usuario.senha
+    ).then((firebaseUser){
 
-        //Redireciona para tela principal
+      //redireciona para tela principal
+      Navigator.pushReplacementNamed(context, "/");
 
-      });
-    
+    });
+
   }
 
   _logarUsuario(Usuario usuario){
@@ -37,11 +39,12 @@ class _HomeState extends State<Home> {
     FirebaseAuth auth = FirebaseAuth.instance;
 
     auth.signInWithEmailAndPassword(
-      email: usuario.email,
-      password: usuario.senha
+        email: usuario.email,
+        password: usuario.senha
     ).then((firebaseUser){
 
-      //Redireciona para tela principal
+      //redireciona para tela principal
+      Navigator.pushReplacementNamed(context, "/");
 
     });
 
@@ -49,36 +52,35 @@ class _HomeState extends State<Home> {
 
   _validarCampos() {
 
-    //Recuperar dados dos campos
+    //Recupera dados dos campos
     String email = _controllerEmail.text;
     String senha = _controllerSenha.text;
 
     if (email.isNotEmpty && email.contains("@")) {
       if (senha.isNotEmpty && senha.length > 6) {
 
-        //Configurar usuario
+        //Configura usuario
         Usuario usuario = Usuario();
         usuario.email = email;
         usuario.senha = senha;
 
-        //Cadastrar ou logar
-        if (_cadastrar) {
+        //cadastrar ou logar
+        if( _cadastrar ){
           //Cadastrar
           _cadastrarUsuario(usuario);
         }else{
           //Logar
           _logarUsuario(usuario);
         }
-        
-      }else{
+
+      } else {
         setState(() {
-          _mensagemErro = "A senha deve conter mais de 6 caracteres";
+          _mensagemErro = "Preencha a senha! digite mais de 6 caracteres";
         });
       }
-      
-    }else{
+    } else {
       setState(() {
-        _mensagemErro = "Preencha o campo de email corretamente";
+        _mensagemErro = "Preencha o E-mail válido";
       });
     }
 
@@ -100,22 +102,21 @@ class _HomeState extends State<Home> {
                 Padding(
                   padding: EdgeInsets.only(bottom: 32),
                   child: Image.asset(
-                    "imagens/logo.png",
+                      "imagens/logo.png",
                     width: 200,
                     height: 150,
                   ),
                 ),
                 InputCustomizado(
                   controller: _controllerEmail,
-                  hint: "Email",
+                  hint: "E-mail",
                   autofocus: true,
                   type: TextInputType.emailAddress,
                 ),
                 InputCustomizado(
                   controller: _controllerSenha,
                   hint: "Senha",
-                  obscure: true,
-                  type: TextInputType.text,
+                  obscure: true
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -123,12 +124,11 @@ class _HomeState extends State<Home> {
                     Text("Logar"),
                     Switch(
                       value: _cadastrar,
-                      onChanged: (value) {
+                      onChanged: (bool valor){
                         setState(() {
-                          _cadastrar = value;
+                          _cadastrar = valor;
                           _textoBotao = "Entrar";
-
-                          if (_cadastrar) {
+                          if( _cadastrar ){
                             _textoBotao = "Cadastrar";
                           }
                         });
@@ -137,33 +137,21 @@ class _HomeState extends State<Home> {
                     Text("Cadastrar"),
                   ],
                 ),
-                RaisedButton(
-                  child: Text(
-                    _textoBotao,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20
-                    ),
-                  ),
-                  color: Color(0xff9c27b0),
-                  padding: EdgeInsets.fromLTRB(32, 16, 32, 16),
-                  onPressed: () {
+                BotaoCustomizado(
+                  texto: _textoBotao,
+                  onPressed: (){
                     _validarCampos();
                   },
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 20),
-                  child: Text(
-                    _mensagemErro,
-                    style: TextStyle(
+                  child: Text(_mensagemErro, style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+                      color: Colors.red
+                  ),),
+                )
+            ],),
           ),
         ),
       ),

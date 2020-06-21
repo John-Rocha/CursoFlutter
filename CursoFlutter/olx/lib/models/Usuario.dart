@@ -1,4 +1,5 @@
 class Usuario {
+
   String _idUsuario;
   String _nome;
   String _email;
@@ -7,28 +8,40 @@ class Usuario {
   Usuario();
 
   Map<String, dynamic> toMap(){
+
     Map<String, dynamic> map = {
-      "idUsuario" : this.idUsuario,
-      "nome" : this.nome,
-      "email" : this.email
+      "idUsuario"   : this.idUsuario,
+      "nome"        : this.nome,
+      "email"       : this.email
     };
+
     return map;
+
   }
 
- String get idUsuario => _idUsuario;
+  String get senha => _senha;
 
- set idUsuario(String value) => _idUsuario = value;
+  set senha(String value) {
+    _senha = value;
+  }
 
- String get nome => _nome;
+  String get email => _email;
 
- set nome(String value) => _nome = value;
+  set email(String value) {
+    _email = value;
+  }
 
- String get email => _email;
+  String get nome => _nome;
 
- set email(String value) => _email = value;
+  set nome(String value) {
+    _nome = value;
+  }
 
- String get senha => _senha;
+  String get idUsuario => _idUsuario;
 
- set senha(String value) => _senha = value;
+  set idUsuario(String value) {
+    _idUsuario = value;
+  }
+
 
 }
