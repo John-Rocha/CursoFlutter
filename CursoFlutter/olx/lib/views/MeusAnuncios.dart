@@ -78,9 +78,11 @@ class _MeusAnunciosState extends State<MeusAnuncios> {
       appBar: AppBar(
         title: Text("Meus Anúncios"),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
         foregroundColor: Colors.white,
-        child: Icon(Icons.add),
+        icon: Icon(Icons.add),
+        label: Text("Adicionar"),
         onPressed: (){
           Navigator.pushNamed(context, "/novo-anuncio");
         },
@@ -126,7 +128,7 @@ class _MeusAnunciosState extends State<MeusAnuncios> {
                                     child: Text(
                                         "Cancelar",
                                       style: TextStyle(
-                                          color: Colors.white
+                                          color: Colors.grey
                                       ),
                                     ),
                                     onPressed: (){
@@ -139,7 +141,7 @@ class _MeusAnunciosState extends State<MeusAnuncios> {
                                     child: Text(
                                       "Remover",
                                       style: TextStyle(
-                                          color: Colors.grey
+                                          color: Colors.white
                                       ),
                                     ),
                                     onPressed: (){
